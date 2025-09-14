@@ -7,7 +7,7 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "PureCheck - Detect Purity. Build Trust.",
+  title: "Purity Lens - Detect Purity. Build Trust.",
   description: "AI-powered food purity detection app to help you verify the quality of your food items",
   generator: "v0.app",
 }

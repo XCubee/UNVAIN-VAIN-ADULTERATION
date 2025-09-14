@@ -1,6 +1,6 @@
-# PureCheck - Food Purity Detection App
+# Purity Lens - Food Purity Detection App
 
-PureCheck is a comprehensive web application that uses AI to analyze photos of food items to detect adulteration and ensure food purity. Built with Next.js, Supabase, and modern web technologies.
+Purity Lens is a comprehensive web application that uses AI to analyze photos of food items to detect adulteration and ensure food purity. Built with Next.js, Supabase, and modern web technologies.
 
 ## Features
 
@@ -34,7 +34,7 @@ PureCheck is a comprehensive web application that uses AI to analyze photos of f
 1. **Clone the repository**
    \`\`\`bash
    git clone <your-repo-url>
-   cd purecheck-app
+   cd purity-lens-app
    \`\`\`
 
 2. **Install dependencies**

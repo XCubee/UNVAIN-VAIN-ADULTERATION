@@ -69,8 +69,8 @@ export default function HomePage() {
                 <Droplets className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">PureCheck</h1>
-                <p className="text-sm text-muted-foreground">Welcome back!</p>
+                <h1 className="text-xl font-bold text-foreground">Purity Lens</h1>
+              <p className="text-sm text-muted-foreground">Welcome back!</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -97,10 +97,6 @@ export default function HomePage() {
               <div>
                 <h2 className="text-xl font-semibold text-foreground mb-2">Quick Test</h2>
                 <p className="text-muted-foreground mb-4">Take a photo and get instant purity results</p>
-                <Button className="bg-primary hover:bg-primary/90">
-                  <Camera className="w-4 h-4 mr-2" />
-                  Start Testing
-                </Button>
               </div>
               <div className="hidden sm:block">
                 <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center">
