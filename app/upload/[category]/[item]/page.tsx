@@ -195,6 +195,36 @@ export default function PhotoUploadPage() {
               <AlertDescription className="text-blue-800">
                 <strong>Photo Guidelines:</strong> Ensure good lighting, clean background, and the sample is clearly
                 visible. The AI analysis accuracy depends on image quality.
+                {categoryId === "milk-dairy" && (
+                  <div className="mt-2">
+                    <strong>Milk & Dairy Tips:</strong> Place sample in clear glass container against white background. Capture any color variations, consistency, and texture clearly.
+                  </div>
+                )}
+                {categoryId === "pulses" && (
+                  <div className="mt-2">
+                    <strong>Pulses Tips:</strong> Spread sample on white plate or paper. Ensure both dry and soaked samples are photographed with consistent lighting to detect color changes.
+                  </div>
+                )}
+                {categoryId === "spices" && (
+                  <div className="mt-2">
+                    <strong>Spices Tips:</strong> Use small white plate for powder samples. Capture both dry powder and after water/test solution is added to show color reactions.
+                  </div>
+                )}
+                {categoryId === "meat" && (
+                  <div className="mt-2">
+                    <strong>Meat Tips:</strong> Photograph in natural light without flash. Capture surface texture, color variations, and any unusual features. Include close-ups of specific areas.
+                  </div>
+                )}
+                {categoryId === "honey" && (
+                  <div className="mt-2">
+                    <strong>Honey Tips:</strong> Use clear glass container. Capture honey's color, transparency, and consistency. Include photos of any crystallization or separation.
+                  </div>
+                )}
+                {categoryId === "vegetables" && (
+                  <div className="mt-2">
+                    <strong>Vegetables Tips:</strong> Photograph whole item first, then cut section if applicable. Capture skin texture, color, and any coating or residue clearly.
+                  </div>
+                )}
               </AlertDescription>
             </Alert>
 
@@ -212,8 +242,79 @@ export default function PhotoUploadPage() {
                   </div>
                   <h3 className="text-lg font-medium text-foreground mb-2">Add Your Photo</h3>
                   <p className="text-muted-foreground mb-6">
-                    Take a clear photo of your sample or upload from your device
+                    Take a clear photo of your {itemName.toLowerCase()} sample or upload from your device
                   </p>
+                  
+                  {/* Category-specific photo instructions */}
+                  <div className="mb-6 text-sm bg-muted/30 p-4 rounded-md">
+                    {categoryId === "milk-dairy" && (
+                      <div className="text-left">
+                        <p className="font-medium mb-1">For best results:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Use natural daylight if possible</li>
+                          <li>Place sample in transparent container</li>
+                          <li>Capture any separation, texture, or color variations</li>
+                          <li>Include test results in separate photos if applicable</li>
+                        </ul>
+                      </div>
+                    )}
+                    {categoryId === "pulses" && (
+                      <div className="text-left">
+                        <p className="font-medium mb-1">For best results:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Spread sample evenly on white surface</li>
+                          <li>Take photos before and after water tests</li>
+                          <li>Capture close-ups of any unusual colors or coatings</li>
+                          <li>Use consistent lighting for all test stages</li>
+                        </ul>
+                      </div>
+                    )}
+                    {categoryId === "spices" && (
+                      <div className="text-left">
+                        <p className="font-medium mb-1">For best results:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Use white plate or paper as background</li>
+                          <li>Capture powder texture and color clearly</li>
+                          <li>Take photos of water/acid test reactions</li>
+                          <li>Include close-ups of any unusual particles</li>
+                        </ul>
+                      </div>
+                    )}
+                    {categoryId === "meat" && (
+                      <div className="text-left">
+                        <p className="font-medium mb-1">For best results:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Photograph in natural light without flash</li>
+                          <li>Capture surface texture and color clearly</li>
+                          <li>Include close-ups of any unusual features</li>
+                          <li>Take photos of water test results if applicable</li>
+                        </ul>
+                      </div>
+                    )}
+                    {categoryId === "honey" && (
+                      <div className="text-left">
+                        <p className="font-medium mb-1">For best results:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Use clear glass container</li>
+                          <li>Capture honey's flow and consistency</li>
+                          <li>Include photos of test results (water/paper tests)</li>
+                          <li>Show any crystallization or separation</li>
+                        </ul>
+                      </div>
+                    )}
+                    {categoryId === "vegetables" && (
+                      <div className="text-left">
+                        <p className="font-medium mb-1">For best results:</p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Photograph whole item first</li>
+                          <li>Include cut section if applicable</li>
+                          <li>Capture skin texture and any coating clearly</li>
+                          <li>Show before and after washing if testing for wax</li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                  
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Button onClick={handleCameraCapture} className="bg-primary hover:bg-primary/90">
                       <Camera className="w-4 h-4 mr-2" />

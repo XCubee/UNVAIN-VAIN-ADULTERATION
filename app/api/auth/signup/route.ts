@@ -14,14 +14,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Password must be at least 6 characters long" }, { status: 400 })
     }
 
-    const supabase = await createClient()
+    try {
+      const supabase = await createClient()
 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo:
-          process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${process.env.NEXT_PUBLIC_SUPABASE_URL}/home`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/home`,
         data: {
           full_name: fullName,
           phone: phone,
@@ -51,6 +51,10 @@ export async function POST(request: NextRequest) {
       message: "User created successfully",
       user: data.user,
     })
+    } catch (supabaseError) {
+      console.error("[v0] Supabase client creation error:", supabaseError)
+      return NextResponse.json({ error: "Authentication service unavailable" }, { status: 503 })
+    }
   } catch (error) {
     console.error("[v0] Signup route error:", error)
 

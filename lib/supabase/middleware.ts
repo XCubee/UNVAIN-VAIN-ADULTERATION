@@ -2,8 +2,11 @@ import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 
 export async function updateSession(request: NextRequest) {
+  // Create a response object that we can modify
   let supabaseResponse = NextResponse.next({
-    request,
+    request: {
+      headers: request.headers,
+    },
   })
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -22,11 +25,21 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request,
+          cookiesToSet.forEach(({ name, value }) => {
+            request.cookies.set(name, value)
           })
-          cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
+          
+          // Create a new response with the updated cookies
+          supabaseResponse = NextResponse.next({
+            request: {
+              headers: request.headers,
+            },
+          })
+          
+          // Set cookies in the response
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options)
+          })
         },
       },
     })

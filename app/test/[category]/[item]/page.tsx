@@ -4,11 +4,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowLeft, Camera, CheckCircle, Clock, Lightbulb, AlertTriangle, Upload, RotateCcw } from "lucide-react"
+import { ArrowLeft, Camera, CheckCircle, Clock, Lightbulb, AlertTriangle } from "lucide-react"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
-import { useState, useRef } from "react"
-import Image from "next/image"
+import { useParams } from "next/navigation"
 
 const testInstructions = {
   "milk-dairy": {
@@ -83,48 +81,48 @@ const testInstructions = {
     },
     yogurt: {
       name: "Yogurt Authenticity Test",
-      description: "Check yogurt for additives and artificial ingredients",
+      description: "Verify the quality and purity of yogurt",
       duration: "5-8 minutes",
       difficulty: "Easy",
       steps: [
         {
           title: "Visual Examination",
-          description: "Check for smooth, consistent texture without separation",
+          description: "Check for consistent texture and natural appearance",
           icon: "👁️",
         },
         {
-          title: "Consistency Test",
-          description: "Tilt spoon - natural yogurt should be thick and not watery",
-          icon: "🥄",
-        },
-        {
-          title: "Smell Check",
-          description: "Should have mild sour aroma without chemical smell",
+          title: "Smell Assessment",
+          description: "Pure yogurt has a fresh, tangy aroma without chemical smells",
           icon: "👃",
         },
         {
-          title: "Taste Test (Optional)",
-          description: "Natural yogurt has balanced sourness, not overly sweet",
-          icon: "👅",
+          title: "Consistency Test",
+          description: "Tilt spoon - natural yogurt should be thick and creamy",
+          icon: "🥄",
+        },
+        {
+          title: "Water Separation Test",
+          description: "Minimal whey separation indicates quality yogurt",
+          icon: "💧",
         },
         {
           title: "Photo Documentation",
-          description: "Take clear photos of yogurt texture and consistency",
+          description: "Take clear photos of yogurt texture and consistency tests",
           icon: "📸",
         },
       ],
       tips: [
-        "Test at refrigerated temperature",
-        "Check for ingredient list - fewer ingredients is better",
-        "Natural yogurt may have whey separation which is normal",
+        "Fresh yogurt should have a pleasant tangy taste",
+        "Check ingredient list for artificial thickeners",
+        "Quality yogurt contains live cultures",
       ],
-      adulterants: ["Artificial thickeners", "Excessive preservatives", "Synthetic flavors", "Artificial sweeteners"],
+      adulterants: ["Artificial thickeners", "Excessive preservatives", "Synthetic flavors", "Starch"],
     },
     butter: {
       name: "Butter Purity Test",
-      description: "Verify butter authenticity and detect substitutes",
-      duration: "3-7 minutes",
-      difficulty: "Easy",
+      description: "Test butter for quality and adulterants",
+      duration: "8-10 minutes",
+      difficulty: "Medium",
       steps: [
         {
           title: "Visual Inspection",
@@ -133,31 +131,31 @@ const testInstructions = {
         },
         {
           title: "Melt Test",
-          description: "Pure butter melts evenly without separation or foaming",
+          description: "Pure butter melts completely and becomes transparent",
           icon: "🔥",
         },
         {
-          title: "Water Droplet Test",
-          description: "Drop water on butter - should not mix easily if pure",
+          title: "Water Test",
+          description: "Add to hot water - pure butter forms clear oil layer on top",
           icon: "💧",
         },
         {
-          title: "Aroma Check",
-          description: "Should have natural dairy smell, not chemical or rancid",
-          icon: "👃",
+          title: "Flame Test",
+          description: "Pure butter burns with yellow flame without sputtering",
+          icon: "🔥",
         },
         {
-          title: "Photo Capture",
-          description: "Take photos of butter sample before and after melt test",
+          title: "Photo Documentation",
+          description: "Take photos of butter before and after melting tests",
           icon: "📸",
         },
       ],
       tips: [
-        "Test at room temperature for best results",
-        "Pure butter has a rich yellow color from natural carotene",
-        "Avoid testing near strong odors that may affect smell test",
+        "Pure butter should have a rich, creamy taste",
+        "Check for uniform melting without separation",
+        "Real butter solidifies when refrigerated",
       ],
-      adulterants: ["Margarine", "Vegetable oils", "Artificial colors", "Hydrogenated fats"],
+      adulterants: ["Vegetable oils", "Margarine", "Hydrogenated fats", "Artificial colors"],
     },
   },
   pulses: {
@@ -200,84 +198,6 @@ const testInstructions = {
       ],
       adulterants: ["Artificial colors", "Kesari dal", "Starch", "Metanil yellow"],
     },
-    "moong-dal": {
-      name: "Moong Dal Purity Test",
-      description: "Verify the quality of green gram split",
-      duration: "8-10 minutes",
-      difficulty: "Easy",
-      steps: [
-        {
-          title: "Sample Collection",
-          description: "Take 2-3 tablespoons of moong dal in a clean white bowl",
-          icon: "🥄",
-        },
-        {
-          title: "Visual Examination",
-          description: "Check for uniform pale yellow color and consistent size",
-          icon: "👁️",
-        },
-        {
-          title: "Float Test",
-          description: "Put a few grains in water - pure moong dal will sink",
-          icon: "💧",
-        },
-        {
-          title: "Color Leaching Test",
-          description: "Soak in warm water for 5 minutes - water should remain clear",
-          icon: "🌡️",
-        },
-        {
-          title: "Photo Capture",
-          description: "Take clear photos of dry dal and after soaking test",
-          icon: "📸",
-        },
-      ],
-      tips: [
-        "Pure moong dal has a natural pale yellow color",
-        "Artificially colored dal will release color in water quickly",
-        "Check for uniform texture and no foreign particles",
-      ],
-      adulterants: ["Artificial colors", "Metanil yellow", "Malachite green", "Lead chromate"],
-    },
-    "chana-dal": {
-      name: "Chana Dal Purity Test",
-      description: "Verify chana dal for quality and artificial additives",
-      duration: "5-8 minutes",
-      difficulty: "Easy",
-      steps: [
-        {
-          title: "Visual Inspection",
-          description: "Check for uniform golden-yellow color without excessive shine",
-          icon: "👁️",
-        },
-        {
-          title: "Water Soak Test",
-          description: "Soak in water - artificial colors will leach out, coloring the water",
-          icon: "💧",
-        },
-        {
-          title: "Texture Test",
-          description: "Feel between fingers - should be firm and not powdery on surface",
-          icon: "✋",
-        },
-        {
-          title: "Size Uniformity",
-          description: "Check for consistent size and split pattern",
-          icon: "🔍",
-        },
-        {
-          title: "Photo Documentation",
-          description: "Take clear photos of dal sample before and after water test",
-          icon: "📸",
-        },
-      ],
-      tips: [
-        "Natural chana dal has a mild nutty aroma",
-        "Use white plate for better color assessment",
-        "Good quality chana dal absorbs water slowly",
-      ],
-      adulterants: ["Metanil yellow", "Lead chromate", "Coating powder", "Artificial colors"],
-    },
     "masoor-dal": {
       name: "Masoor Dal Purity Test",
       description: "Test red lentils for common adulterants",
@@ -316,6 +236,84 @@ const testInstructions = {
         "Check for uniform size and shape",
       ],
       adulterants: ["Artificial colors", "Brick powder", "Sand", "Lead chromate"],
+    },
+    "chana-dal": {
+      name: "Chana Dal Purity Test",
+      description: "Test split chickpeas for common adulterants",
+      duration: "10-15 minutes",
+      difficulty: "Medium",
+      steps: [
+        {
+          title: "Visual Examination",
+          description: "Check for uniform yellow color and split texture",
+          icon: "👁️",
+        },
+        {
+          title: "Float Test",
+          description: "Place in water - pure dal sinks, adulterants may float",
+          icon: "💧",
+        },
+        {
+          title: "Color Release Test",
+          description: "Soak in warm water for 10 minutes to check for artificial colors",
+          icon: "🌡️",
+        },
+        {
+          title: "Texture Test",
+          description: "Rub between fingers to check for artificial coating",
+          icon: "✋",
+        },
+        {
+          title: "Photo Documentation",
+          description: "Take clear photos before and after soaking tests",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Pure chana dal has a natural yellow color",
+        "Should not release bright colors in water",
+        "Check for uniform size and minimal broken pieces",
+      ],
+      adulterants: ["Metanil yellow", "Artificial colors", "Kesari dal", "Coating agents"],
+    },
+    "moong-dal": {
+      name: "Moong Dal Purity Test",
+      description: "Test split mung beans for adulterants",
+      duration: "8-10 minutes",
+      difficulty: "Easy",
+      steps: [
+        {
+          title: "Visual Check",
+          description: "Examine for consistent pale yellow color and size",
+          icon: "👁️",
+        },
+        {
+          title: "Water Immersion",
+          description: "Soak in clear water for 5 minutes to check for color release",
+          icon: "💧",
+        },
+        {
+          title: "Spread Test",
+          description: "Spread on white paper to check for foreign particles",
+          icon: "📄",
+        },
+        {
+          title: "Rubbing Test",
+          description: "Rub between palms to detect artificial coating",
+          icon: "✋",
+        },
+        {
+          title: "Photo Evidence",
+          description: "Take photos of dry dal and after water immersion",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Pure moong dal has a natural pale yellow color",
+        "Should not release bright colors in water",
+        "Check for uniform texture and minimal broken pieces",
+      ],
+      adulterants: ["Artificial colors", "Metanil yellow", "Coating agents", "Foreign seeds"],
     },
   },
   spices: {
@@ -360,28 +358,28 @@ const testInstructions = {
     },
     "chili-powder": {
       name: "Chili Powder Authenticity Test",
-      description: "Check chili powder for artificial colors and additives",
-      duration: "5-8 minutes",
+      description: "Detect artificial colors and fillers in chili powder",
+      duration: "5-10 minutes",
       difficulty: "Easy",
       steps: [
         {
-          title: "Visual Examination",
-          description: "Check for consistent deep red color without bright artificial tones",
+          title: "Visual Inspection",
+          description: "Check for natural red color with slight variations",
           icon: "👁️",
         },
         {
           title: "Water Test",
-          description: "Add to water - artificial colors will quickly create bright red streaks",
+          description: "Mix with water - pure chili creates natural red solution",
           icon: "💧",
         },
         {
           title: "Oil Float Test",
-          description: "Sprinkle on water surface - pure powder sinks, sawdust floats",
+          description: "Sprinkle on water surface - artificial colors will dissolve quickly",
           icon: "🛢️",
         },
         {
-          title: "Aroma Check",
-          description: "Should have pungent, spicy smell without chemical odors",
+          title: "Aroma Test",
+          description: "Pure chili has distinctive spicy smell, not chemical",
           icon: "👃",
         },
         {
@@ -391,89 +389,89 @@ const testInstructions = {
         },
       ],
       tips: [
-        "Use white plate or paper for visual inspection",
-        "Pure chili powder burns the nose slightly when smelled",
-        "Store in cool, dark place to maintain quality",
+        "Pure chili powder has natural color variations",
+        "Artificial colors create unnaturally bright solutions",
+        "Check for uniform texture without visible fillers",
       ],
-      adulterants: ["Sudan red dye", "Brick powder", "Artificial colors", "Sawdust", "Starch"],
+      adulterants: ["Sudan red dyes", "Brick powder", "Artificial colors", "Sawdust"],
     },
     cumin: {
       name: "Cumin Seed Purity Test",
-      description: "Verify authenticity of cumin seeds or powder",
-      duration: "4-6 minutes",
-      difficulty: "Easy",
+      description: "Test cumin seeds and powder for adulterants",
+      duration: "8-10 minutes",
+      difficulty: "Medium",
       steps: [
         {
           title: "Visual Check",
-          description: "Seeds should be uniform brownish color with ridges; powder should be tan",
+          description: "Examine for uniform brownish color and characteristic shape",
           icon: "👁️",
         },
         {
           title: "Float Test",
-          description: "Place in water - pure cumin sinks while adulterants often float",
+          description: "Place in water - pure cumin floats initially then sinks",
           icon: "💧",
         },
         {
           title: "Aroma Test",
-          description: "Should have strong, distinctive earthy-sweet aroma",
+          description: "Rub between fingers - should release distinctive cumin aroma",
           icon: "👃",
         },
         {
-          title: "Hand Rub Test",
-          description: "Rub between palms - should release aromatic oils and fragrance",
-          icon: "✋",
+          title: "Paper Test",
+          description: "Rub on white paper - should not leave colored marks",
+          icon: "📄",
         },
         {
-          title: "Photo Capture",
-          description: "Take clear photos of cumin sample and test results",
+          title: "Photo Evidence",
+          description: "Take clear photos of seeds/powder and test results",
           icon: "📸",
         },
       ],
       tips: [
-        "Examine in natural light for best color assessment",
-        "Pure cumin has a slightly bitter aftertaste",
-        "Store in airtight container to preserve aroma",
+        "Pure cumin has a distinctive earthy aroma",
+        "Seeds should be uniform in size and shape",
+        "Powder should have consistent color without bright spots",
       ],
-      adulterants: ["Grass seeds", "Charcoal powder", "Dirt", "Stone powder", "Papaya seeds"],
+      adulterants: ["Grass seeds", "Charcoal powder", "Artificial colors", "Dirt"],
     },
     coriander: {
-      name: "Coriander Seed Quality Test",
-      description: "Test coriander seeds or powder for purity",
-      duration: "4-7 minutes",
+      name: "Coriander Powder Test",
+      description: "Verify the purity of coriander powder",
+      duration: "5-8 minutes",
       difficulty: "Easy",
       steps: [
         {
-          title: "Visual Inspection",
-          description: "Seeds should be round, yellowish-brown; powder should be light brown",
-          icon: "👁️",
-        },
-        {
-          title: "Water Test",
-          description: "Add to water - pure coriander sinks, adulterants may float",
-          icon: "💧",
+          title: "Color Examination",
+          description: "Check for natural light brown to yellowish-green color",
+          icon: "🎨",
         },
         {
           title: "Aroma Check",
-          description: "Should have citrusy, slightly sweet aroma without musty smell",
+          description: "Pure coriander has distinctive citrusy, earthy smell",
           icon: "👃",
         },
         {
-          title: "Crush Test",
-          description: "Crush seeds - should release fragrant aroma and oils",
-          icon: "👊",
+          title: "Water Test",
+          description: "Mix with water - should form natural colored solution",
+          icon: "💧",
+        },
+        {
+          title: "Texture Test",
+          description: "Rub between fingers - should feel slightly oily, not gritty",
+          icon: "✋",
         },
         {
           title: "Photo Documentation",
-          description: "Take clear photos of coriander sample and test results",
+          description: "Take clear photos of powder and water test",
           icon: "📸",
         },
       ],
       tips: [
-        "Check for uniform size and shape in seeds",
-        "Pure coriander powder has a pale tan color, not dark brown",
-        "Store in cool, dry place to maintain freshness",
+        "Pure coriander powder has a pleasant aroma",
+        "Should not have excessive dust or fillers",
+        "Natural color variations are normal",
       ],
-      adulterants: ["Sand", "Dirt", "Sawdust", "Starch", "Dung powder"],
+      adulterants: ["Sawdust", "Starch", "Horse dung", "Artificial colors"],
     },
   },
   honey: {
@@ -516,83 +514,122 @@ const testInstructions = {
       ],
       adulterants: ["Sugar syrup", "Corn syrup", "Artificial flavors", "Water"],
     },
-    "processed-honey": {
-      name: "Processed Honey Quality Test",
-      description: "Test commercial processed honey for adulterants",
-      duration: "5-8 minutes",
-      difficulty: "Easy",
-      steps: [
-        {
-          title: "Visual Check",
-          description: "Look for uniform color and consistency without separation",
-          icon: "👁️",
-        },
-        {
-          title: "Paper Test",
-          description: "Drop on paper - pure honey doesn't get absorbed quickly",
-          icon: "📄",
-        },
-        {
-          title: "Thumb Test",
-          description: "Press between fingers - pure honey doesn't spread easily",
-          icon: "👍",
-        },
-        {
-          title: "Dissolution Test",
-          description: "Mix with water - pure honey forms lumps before dissolving",
-          icon: "💧",
-        },
-        {
-          title: "Photo Capture",
-          description: "Take clear photos of honey sample and test results",
-          icon: "📸",
-        },
-      ],
-      tips: [
-        "Processed honey may be lighter in color than raw honey",
-        "Check label for added ingredients like glucose or fructose",
-        "Store away from direct sunlight for testing",
-      ],
-      adulterants: ["High fructose corn syrup", "Invert sugar", "Rice syrup", "Excessive water"],
-    },
     "organic-honey": {
-      name: "Organic Honey Verification Test",
-      description: "Verify the authenticity of organic honey claims",
-      duration: "6-10 minutes",
+      name: "Organic Honey Test",
+      description: "Verify the authenticity of organic honey",
+      duration: "8-12 minutes",
       difficulty: "Medium",
       steps: [
         {
-          title: "Label Inspection",
-          description: "Check for proper organic certification logos and details",
-          icon: "🏷️",
+          title: "Visual Inspection",
+          description: "Check for natural cloudiness and color variations typical of unprocessed honey",
+          icon: "👁️",
         },
         {
           title: "Viscosity Test",
-          description: "Tilt container - organic honey flows slowly with high viscosity",
+          description: "Tilt container - organic honey flows slowly with natural resistance",
           icon: "⏱️",
         },
         {
-          title: "Aroma Check",
-          description: "Should have natural floral or herbal aroma without chemical smell",
+          title: "Aroma Assessment",
+          description: "Organic honey has complex floral notes without artificial sweetness",
           icon: "👃",
         },
         {
-          title: "Crystallization Pattern",
-          description: "Natural crystallization starts from bottom, not throughout",
-          icon: "❄️",
+          title: "Taste Test (Optional)",
+          description: "Should have complex flavor profile with natural aftertaste",
+          icon: "👅",
         },
         {
           title: "Photo Documentation",
-          description: "Take clear photos of honey, label, and test results",
+          description: "Take clear photos showing color, clarity, and flow characteristics",
           icon: "📸",
         },
       ],
       tips: [
-        "Organic honey varies in color based on flower source",
-        "Real organic honey may contain small amounts of pollen or wax",
-        "Taste should be complex with distinct floral notes",
+        "Organic honey often contains pollen and propolis particles",
+        "Natural crystallization varies by flower source and season",
+        "Check for certification marks on original packaging",
       ],
-      adulterants: ["Non-organic honey", "Sugar syrup", "Corn syrup", "Artificial sweeteners"],
+      adulterants: ["Conventional honey", "Sugar syrup", "Filtered honey", "Heat-treated honey"],
+    },
+    "processed-honey": {
+      name: "Processed Honey Test",
+      description: "Detect adulteration in commercial honey",
+      duration: "8-12 minutes",
+      difficulty: "Easy",
+      steps: [
+        {
+          title: "String Test",
+          description: "Dip finger and pull up - pure honey forms continuous string",
+          icon: "🧵",
+        },
+        {
+          title: "Flame Test",
+          description: "Apply to cotton wick - pure honey burns, adulterated may not",
+          icon: "🔥",
+        },
+        {
+          title: "Dissolution Test",
+          description: "Mix with water - pure honey dissolves slowly and evenly",
+          icon: "💧",
+        },
+        {
+          title: "Texture Assessment",
+          description: "Rub between fingers - should feel smooth, not grainy",
+          icon: "✋",
+        },
+        {
+          title: "Photo Documentation",
+          description: "Take clear photos of all test results",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Pure honey doesn't dissolve immediately in cold water",
+        "Adulterated honey may have overly sweet smell",
+        "Check for uniform texture throughout",
+      ],
+      adulterants: ["High fructose corn syrup", "Inverted sugar", "Rice syrup", "Jaggery"],
+    },
+    "comb-honey": {
+      name: "Honeycomb Authenticity Test",
+      description: "Verify the purity of honeycomb",
+      duration: "5-10 minutes",
+      difficulty: "Medium",
+      steps: [
+        {
+          title: "Visual Inspection",
+          description: "Check for uniform cell structure and natural color variations",
+          icon: "👁️",
+        },
+        {
+          title: "Wax Test",
+          description: "Pure beeswax is pliable when warmed, not brittle",
+          icon: "🔥",
+        },
+        {
+          title: "Honey Extraction",
+          description: "Press gently - pure honey flows easily from cells",
+          icon: "💧",
+        },
+        {
+          title: "Aroma Check",
+          description: "Should have natural honey and beeswax smell",
+          icon: "👃",
+        },
+        {
+          title: "Photo Evidence",
+          description: "Take detailed photos of comb structure and honey flow",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Natural honeycomb has slight color variations",
+        "Cells should be consistently sized but not perfectly uniform",
+        "Pure comb has distinctive beeswax aroma",
+      ],
+      adulterants: ["Artificial wax", "Sugar-fed honey", "Synthetic foundations"],
     },
   },
   vegetables: {
@@ -635,122 +672,161 @@ const testInstructions = {
       ],
       adulterants: ["Wax coating", "Pesticide residues", "Artificial colors"],
     },
-    tomatoes: {
-      name: "Tomato Ripening Agent Test",
-      description: "Check tomatoes for artificial ripening agents and chemicals",
-      duration: "4-7 minutes",
-      difficulty: "Easy",
-      steps: [
-        {
-          title: "Visual Check",
-          description: "Look for uniform red color without green patches near stem",
-          icon: "👁️",
-        },
-        {
-          title: "Firmness Test",
-          description: "Naturally ripened tomatoes have consistent firmness",
-          icon: "✋",
-        },
-        {
-          title: "Float Test",
-          description: "Place in water - artificially ripened often float",
-          icon: "💧",
-        },
-        {
-          title: "Cut Test",
-          description: "Cut open - artificially ripened may be hollow or pale inside",
-          icon: "✂️",
-        },
-        {
-          title: "Photo Documentation",
-          description: "Take clear photos of tomato exterior and interior",
-          icon: "📸",
-        },
-      ],
-      tips: [
-        "Naturally ripened tomatoes have slight variations in color",
-        "Check for unusual white powder residue on skin",
-        "Naturally ripened tomatoes have stronger aroma",
-      ],
-      adulterants: ["Calcium carbide", "Ethylene gas", "Oxytocin", "Artificial colors"],
-    },
-    "leafy-greens": {
-      name: "Leafy Greens Pesticide Test",
-      description: "Check leafy vegetables for pesticide residue and freshness",
-      duration: "5-10 minutes",
-      difficulty: "Medium",
-      steps: [
-        {
-          title: "Visual Inspection",
-          description: "Check for unnaturally bright color or waxy coating",
-          icon: "👁️",
-        },
-        {
-          title: "Water Soak Test",
-          description: "Soak in salt water - pesticides may create foam or residue",
-          icon: "💧",
-        },
-        {
-          title: "Stem Check",
-          description: "Examine stems - should be crisp and not artificially colored",
-          icon: "🌱",
-        },
-        {
-          title: "Texture Test",
-          description: "Leaves should be crisp, not limp or artificially stiff",
-          icon: "✋",
-        },
-        {
-          title: "Photo Documentation",
-          description: "Take clear photos before and after water test",
-          icon: "📸",
-        },
-      ],
-      tips: [
-        "Organic greens may have small holes from insects",
-        "Use lukewarm water with salt for soaking test",
-        "Check for unusual chemical smell",
-      ],
-      adulterants: ["Pesticide residue", "Chemical preservatives", "Artificial colors", "Growth hormones"],
-    },
     berries: {
-      name: "Berry Freshness and Additive Test",
-      description: "Test berries for artificial preservatives and freshness",
-      duration: "4-6 minutes",
+      name: "Berry Freshness Test",
+      description: "Test for artificial coloring and preservatives in berries",
+      duration: "5-8 minutes",
       difficulty: "Easy",
       steps: [
         {
           title: "Visual Examination",
-          description: "Check for uniform color without white powdery residue",
+          description: "Check for uniform size, unnaturally bright colors, or perfect appearance",
           icon: "👁️",
         },
         {
-          title: "Water Rinse Test",
-          description: "Rinse in water - preservatives may create unusual foam",
+          title: "Water Test",
+          description: "Place in water - artificial colors will leach out quickly",
           icon: "💧",
         },
         {
-          title: "Crush Test",
-          description: "Crush a berry - should have natural juice and seeds",
-          icon: "👊",
+          title: "Texture Assessment",
+          description: "Natural berries have varied firmness; artificially preserved ones feel uniform",
+          icon: "✋",
         },
         {
-          title: "Smell Check",
-          description: "Should have natural fruity aroma without chemical smell",
-          icon: "👃",
+          title: "Crush Test",
+          description: "Gently crush a berry - should stain naturally without unusual colors",
+          icon: "👆",
         },
         {
           title: "Photo Documentation",
-          description: "Take clear photos of berries before and after tests",
+          description: "Take photos before and after water and crush tests",
           icon: "📸",
         },
       ],
       tips: [
-        "Fresh berries have slight variations in size and color",
-        "Naturally grown berries may have small imperfections",
-        "Check for mold especially in container bottoms",
+        "Natural berries have slight variations in color and size",
+        "Berries with perfect appearance year-round may be treated",
+        "Fresh berries should have natural aroma when crushed",
       ],
-      adulterants: ["Preservatives", "Fungicides", "Artificial colors", "Wax coatings"],
+      adulterants: ["Artificial colors", "Preservatives", "Fungicides", "Wax coatings"],
+    },
+    tomatoes: {
+      name: "Tomato Freshness Test",
+      description: "Test for artificial ripening agents in tomatoes",
+      duration: "5-8 minutes",
+      difficulty: "Easy",
+      steps: [
+        {
+          title: "Visual Check",
+          description: "Look for uniform color and texture throughout the tomato",
+          icon: "👁️",
+        },
+        {
+          title: "Cut Test",
+          description: "Slice open - natural tomatoes have consistent color inside",
+          icon: "🔪",
+        },
+        {
+          title: "Float Test",
+          description: "Place in water - artificially ripened tomatoes often float",
+          icon: "💧",
+        },
+        {
+          title: "Texture Assessment",
+          description: "Should feel firm but slightly soft, not hard or mushy",
+          icon: "✋",
+        },
+        {
+          title: "Photo Documentation",
+          description: "Take photos of whole and cut tomato for analysis",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Naturally ripened tomatoes have consistent color throughout",
+        "Check for unusual patches or color variations",
+        "Artificially ripened tomatoes may have harder texture",
+      ],
+      adulterants: ["Calcium carbide", "Ethylene gas", "Artificial colors"],
+    },
+    greens: {
+      name: "Leafy Greens Test",
+      description: "Check for artificial coloring and preservatives",
+      duration: "5-10 minutes",
+      difficulty: "Easy",
+      steps: [
+        {
+          title: "Color Inspection",
+          description: "Look for unnaturally bright or uniform green color",
+          icon: "👁️",
+        },
+        {
+          title: "Water Test",
+          description: "Soak in warm water - artificial colors will leach out",
+          icon: "💧",
+        },
+        {
+          title: "Texture Check",
+          description: "Natural greens have varied texture, not uniformly waxy",
+          icon: "✋",
+        },
+        {
+          title: "Wilting Test",
+          description: "Leave at room temperature - treated greens wilt differently",
+          icon: "🕒",
+        },
+        {
+          title: "Photo Documentation",
+          description: "Take photos before and after water test",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Natural greens have color variations between leaves",
+        "Check for unusual smell when soaking in warm water",
+        "Treated vegetables may not wilt normally",
+      ],
+      adulterants: ["Malachite green", "Copper compounds", "Chemical preservatives"],
+    },
+    "leafy-greens": {
+      name: "Leafy Green Vegetables Test",
+      description: "Detect chemical treatments and preservatives in leafy greens",
+      duration: "6-10 minutes",
+      difficulty: "Easy",
+      steps: [
+        {
+          title: "Visual Assessment",
+          description: "Check for overly perfect appearance and unnaturally vibrant color",
+          icon: "👁️",
+        },
+        {
+          title: "Vinegar Test",
+          description: "Soak a leaf in vinegar solution - artificial colors will separate",
+          icon: "🧪",
+        },
+        {
+          title: "Stem Inspection",
+          description: "Examine stems - should be naturally firm without unusual coating",
+          icon: "🔍",
+        },
+        {
+          title: "Freshness Test",
+          description: "Bend a leaf - natural greens snap crisply when fresh",
+          icon: "💪",
+        },
+        {
+          title: "Photo Evidence",
+          description: "Take photos before and after vinegar test for analysis",
+          icon: "📸",
+        },
+      ],
+      tips: [
+        "Organic leafy greens may have small holes from insects",
+        "Natural variations in color and leaf size are normal",
+        "Excessive uniformity often indicates treatment",
+      ],
+      adulterants: ["Oxalic acid", "Copper sulfate", "Formaldehyde", "Artificial dyes"],
     },
   },
   meat: {
@@ -794,164 +870,134 @@ const testInstructions = {
       adulterants: ["Formalin", "Artificial colors", "Growth hormones", "Preservatives"],
     },
     fish: {
-      name: "Fish Freshness and Preservative Test",
-      description: "Check fish for freshness and chemical preservatives",
+      name: "Fish Freshness Test",
+      description: "Detect preservatives and verify freshness of fish",
       duration: "5-10 minutes",
       difficulty: "Medium",
       steps: [
         {
           title: "Eye Examination",
-          description: "Fresh fish has clear, bulging eyes; old fish has sunken, cloudy eyes",
+          description: "Fresh fish has clear, bulging eyes, not sunken or cloudy",
           icon: "👁️",
         },
         {
           title: "Gill Check",
-          description: "Fresh fish has bright red gills; treated fish may have artificial red",
+          description: "Gills should be bright red/pink, not brown or grayish",
           icon: "🔍",
         },
         {
           title: "Texture Test",
-          description: "Press flesh - should spring back, not leave indentation",
+          description: "Press flesh - should be firm and spring back, not soft",
           icon: "✋",
         },
         {
-          title: "Smell Assessment",
-          description: "Fresh fish has mild ocean smell; chemical smell indicates preservatives",
+          title: "Smell Test",
+          description: "Fresh fish has mild ocean smell, not strong or ammonia-like",
           icon: "👃",
         },
         {
           title: "Photo Documentation",
-          description: "Take clear photos of fish eyes, gills, and flesh",
+          description: "Take clear photos of eyes, gills, and overall appearance",
           icon: "📸",
         },
       ],
       tips: [
-        "Fresh fish should have firm, shiny skin",
-        "Scales should be intact and firmly attached",
-        "Avoid fish with excessive slime or sticky residue",
+        "Check for shiny, metallic skin with tight scales",
+        "Avoid fish with excessive slime or dryness",
+        "Fresh fish should not have strong fishy odor",
       ],
       adulterants: ["Formalin", "Ammonia compounds", "Sodium benzoate", "Artificial colors"],
     },
     mutton: {
-      name: "Mutton Quality and Freshness Test",
-      description: "Verify freshness and detect adulterants in mutton",
-      duration: "5-8 minutes",
+      name: "Mutton Quality Test",
+      description: "Verify freshness and detect preservatives in mutton",
+      duration: "8-10 minutes",
       difficulty: "Medium",
       steps: [
         {
-          title: "Visual Check",
-          description: "Fresh mutton is bright red; old meat is dark or brown",
-          icon: "👁️",
+          title: "Color Inspection",
+          description: "Fresh mutton should be bright red, not brown or dark",
+          icon: "🎨",
         },
         {
-          title: "Finger Press Test",
-          description: "Press meat - fresh mutton regains shape quickly",
+          title: "Texture Assessment",
+          description: "Should be firm and slightly moist, not sticky or slimy",
           icon: "✋",
         },
         {
-          title: "Fat Examination",
-          description: "Mutton fat should be firm, white; not yellow or soft",
+          title: "Marbling Check",
+          description: "Look for natural fat distribution, not excessive fat",
           icon: "🔍",
         },
         {
-          title: "Smell Test",
-          description: "Fresh mutton has mild smell; strong odor indicates spoilage",
+          title: "Odor Test",
+          description: "Fresh mutton has mild smell, not strong or sour",
           icon: "👃",
         },
         {
-          title: "Photo Documentation",
-          description: "Take clear photos of meat color, texture, and fat",
+          title: "Photo Evidence",
+          description: "Take clear photos showing color, texture, and marbling",
           icon: "📸",
         },
       ],
       tips: [
-        "Fresh mutton should not be excessively wet or dry",
-        "Check for unusual bright red color which may indicate treatment",
-        "Meat should not have slimy texture or sticky residue",
+        "Fresh mutton should spring back when pressed",
+        "Fat should be white or cream-colored, not yellow",
+        "Keep refrigerated during testing",
       ],
-      adulterants: ["Meat glue (transglutaminase)", "Formalin", "Artificial colors", "Nitrates"],
+      adulterants: ["Formalin", "Artificial colors", "Preservatives", "Meat glue"],
     },
     prawns: {
-      name: "Prawn Freshness and Chemical Test",
-      description: "Test prawns for freshness and chemical preservatives",
-      duration: "4-7 minutes",
+      name: "Prawn Freshness Test",
+      description: "Detect preservatives and verify freshness of prawns",
+      duration: "5-8 minutes",
       difficulty: "Easy",
       steps: [
         {
           title: "Visual Inspection",
-          description: "Fresh prawns have translucent appearance; not opaque or yellow",
+          description: "Fresh prawns have translucent flesh with pinkish tint",
           icon: "👁️",
         },
         {
           title: "Shell Check",
-          description: "Shells should be firmly attached; not loose or slipping off",
+          description: "Shells should be firm and attached, not loose or soft",
           icon: "🦐",
         },
         {
-          title: "Head-Body Connection",
-          description: "Head should be firmly attached to body in fresh prawns",
-          icon: "🔍",
-        },
-        {
-          title: "Smell Assessment",
-          description: "Fresh prawns have mild ocean smell; ammonia smell indicates spoilage",
+          title: "Smell Test",
+          description: "Should have mild ocean smell, not ammonia or chemical",
           icon: "👃",
         },
         {
+          title: "Texture Test",
+          description: "Flesh should be firm and springy, not mushy or slimy",
+          icon: "✋",
+        },
+        {
           title: "Photo Documentation",
-          description: "Take clear photos of prawns showing color and condition",
+          description: "Take clear photos showing color, texture, and shell condition",
           icon: "📸",
         },
       ],
       tips: [
-        "Fresh prawns curl naturally in C-shape",
+        "Fresh prawns have bright, clear eyes",
         "Avoid prawns with black spots on shell or flesh",
-        "Flesh should be firm and not mushy when touched",
+        "Heads should be firmly attached to bodies",
       ],
-      adulterants: ["Sodium metabisulfite", "Formalin", "Borax", "Artificial colors"],
+      adulterants: ["Formalin", "Sodium benzoate", "Borax", "Artificial colors"],
     },
   },
 }
 
 export default function TestInstructionPage() {
   const params = useParams()
-  const router = useRouter()
   const categoryId = params.category as string
   const itemId = params.item as string
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const testData =
-    testInstructions[categoryId as keyof typeof testInstructions]?.[itemId as keyof (typeof testInstructions)[keyof typeof testInstructions]]
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setSelectedFile(file)
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleCameraCapture = () => {
-    fileInputRef.current?.click()
-  }
-
-  const retakePhoto = () => {
-    setSelectedImage(null)
-    setSelectedFile(null)
-  }
-
-  const proceedToAnalysis = () => {
-    if (selectedImage && selectedFile) {
-      router.push(`/upload/${categoryId}/${itemId}`)
-    }
-  }
+    testInstructions[categoryId as keyof typeof testInstructions]?.[
+      itemId as keyof (typeof testInstructions)[keyof typeof testInstructions]
+    ]
 
   if (!testData) {
     return (
@@ -1092,86 +1138,19 @@ export default function TestInstructionPage() {
           </CardContent>
         </Card>
 
-        {/* Image Upload Section */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Set Test Image</CardTitle>
-            <CardDescription>Take or upload a photo of your {itemId.replace(/-/g, ' ')} sample</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              capture="environment"
-            />
-            
-            {!selectedImage ? (
-              <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-muted-foreground/25 rounded-lg bg-muted/50">
-                <div className="mb-4 text-muted-foreground">
-                  <Camera className="w-12 h-12 mx-auto mb-2" />
-                  <p>No image selected</p>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Button onClick={handleCameraCapture} className="bg-primary hover:bg-primary/90">
-                    <Camera className="w-4 h-4 mr-2" />
-                    Take Photo
-                  </Button>
-                  <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload Image
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center">
-                <div className="relative w-full max-w-md h-64 mb-4 rounded-lg overflow-hidden">
-                  <Image 
-                    src={selectedImage} 
-                    alt="Selected food sample" 
-                    fill 
-                    style={{ objectFit: 'contain' }} 
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={retakePhoto}>
-                    <RotateCcw className="w-4 h-4 mr-2" />
-                    Retake Photo
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
         {/* Action Button */}
         <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
           <CardContent className="p-6 text-center">
             <h3 className="text-lg font-semibold text-foreground mb-2">Ready to Test?</h3>
             <p className="text-muted-foreground mb-4">
-              Once you've completed all the steps above and taken a photo, proceed to analysis.
+              Once you've completed all the steps above, take a clear photo for AI analysis.
             </p>
-            {selectedImage ? (
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90"
-                onClick={proceedToAnalysis}
-              >
+            <Link href={`/upload/${categoryId}/${itemId}`}>
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
                 <Camera className="w-5 h-5 mr-2" />
-                Analyze Sample
+                Take Photo & Analyze
               </Button>
-            ) : (
-              <Button 
-                size="lg" 
-                className="bg-primary/50 hover:bg-primary/60"
-                disabled
-              >
-                <Camera className="w-5 h-5 mr-2" />
-                Take Photo First
-              </Button>
-            )}
+            </Link>
           </CardContent>
         </Card>
       </main>

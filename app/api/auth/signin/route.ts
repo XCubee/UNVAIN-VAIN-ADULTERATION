@@ -10,7 +10,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
     }
 
-    const supabase = await createClient()
+    try {
+      const supabase = await createClient()
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
@@ -39,6 +40,10 @@ export async function POST(request: NextRequest) {
       message: "Signed in successfully",
       user: data.user,
     })
+    } catch (supabaseError) {
+      console.error("[v0] Supabase client creation error:", supabaseError)
+      return NextResponse.json({ error: "Authentication service unavailable" }, { status: 503 })
+    }
   } catch (error) {
     console.error("[v0] Signin route error:", error)
 

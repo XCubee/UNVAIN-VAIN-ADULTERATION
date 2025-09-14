@@ -11,6 +11,7 @@ export async function createClient() {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!supabaseUrl || !supabaseAnonKey) {
+    console.error("[v0] Missing Supabase environment variables in server client")
     throw new Error(
       "Missing Supabase environment variables. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables.",
     )
@@ -19,14 +20,21 @@ export async function createClient() {
   try {
     const cookieStore = await cookies()
 
-    return createServerClient(supabaseUrl, supabaseAnonKey, {
+    const client = createServerClient(supabaseUrl, supabaseAnonKey, {
       cookies: {
         getAll() {
-          return cookieStore.getAll()
+          try {
+            return cookieStore.getAll()
+          } catch (error) {
+            console.warn("[v0] Failed to get cookies in Server Component:", error)
+            return []
+          }
         },
         setAll(cookiesToSet) {
           try {
-            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
           } catch (error) {
             // The "setAll" method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
@@ -36,6 +44,8 @@ export async function createClient() {
         },
       },
     })
+    
+    return client
   } catch (error) {
     console.error("[v0] Failed to create Supabase server client:", error)
     throw new Error("Failed to initialize Supabase server client. Please check your configuration.")

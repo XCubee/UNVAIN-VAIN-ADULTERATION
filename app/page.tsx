@@ -9,87 +9,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Droplets, Shield, Sparkles, AlertCircle } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Droplets, Shield, Sparkles } from "lucide-react"
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  
-  // Form state
-  const [signinEmail, setSigninEmail] = useState('')
-  const [signinPassword, setSigninPassword] = useState('')
-  const [signupEmail, setSignupEmail] = useState('')
-  const [signupPassword, setSignupPassword] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [phone, setPhone] = useState('')
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError(null)
-    
-    try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: signinEmail,
-          password: signinPassword,
-        }),
-      })
-      
-      const data = await response.json()
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to sign in')
-      }
-      
-      // Redirect to home page on successful login
-      window.location.href = '/home'
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
-    } finally {
+    // Simulate authentication
+    setTimeout(() => {
       setIsLoading(false)
-    }
-  }
-  
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
-    
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: signupEmail,
-          password: signupPassword,
-          fullName,
-          phone,
-        }),
-      })
-      
-      const data = await response.json()
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to create account')
-      }
-      
-      // Show success message and redirect to home
-      alert('Account created successfully! Please check your email to verify your account.')
-      window.location.href = '/home'
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
-    } finally {
-      setIsLoading(false)
-    }
+      // Redirect to home page
+      window.location.href = "/home"
+    }, 2000)
   }
 
   return (
@@ -123,13 +57,7 @@ export default function AuthPage() {
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4 mt-6">
-                {error && (
-                  <Alert variant="destructive" className="mb-4">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-                <form onSubmit={handleSignIn} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -138,8 +66,6 @@ export default function AuthPage() {
                       placeholder="Enter your email"
                       required
                       className="bg-input border-border"
-                      value={signinEmail}
-                      onChange={(e) => setSigninEmail(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -150,8 +76,6 @@ export default function AuthPage() {
                       placeholder="Enter your password"
                       required
                       className="bg-input border-border"
-                      value={signinPassword}
-                      onChange={(e) => setSigninPassword(e.target.value)}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -178,13 +102,7 @@ export default function AuthPage() {
               </TabsContent>
 
               <TabsContent value="signup" className="space-y-4 mt-6">
-                {error && (
-                  <Alert variant="destructive" className="mb-4">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-                <form onSubmit={handleSignUp} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
@@ -193,8 +111,6 @@ export default function AuthPage() {
                       placeholder="Enter your full name"
                       required
                       className="bg-input border-border"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -205,8 +121,6 @@ export default function AuthPage() {
                       placeholder="Enter your email"
                       required
                       className="bg-input border-border"
-                      value={signupEmail}
-                      onChange={(e) => setSignupEmail(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -214,23 +128,9 @@ export default function AuthPage() {
                     <Input
                       id="signup-password"
                       type="password"
-                      placeholder="Create a password (min. 6 characters)"
+                      placeholder="Create a password"
                       required
-                      minLength={6}
                       className="bg-input border-border"
-                      value={signupPassword}
-                      onChange={(e) => setSignupPassword(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone (Optional)</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="Enter your phone number"
-                      className="bg-input border-border"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
