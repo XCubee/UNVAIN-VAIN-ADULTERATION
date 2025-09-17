@@ -6,44 +6,32 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { BackHeader } from "@/components/BackHeader"
+import { useTranslation } from "@/lib/utils/translate"
 
 export default function ProfilePage() {
+  const { t } = useTranslation()
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center space-x-3">
-            <Link href="/home">
-              <Button>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back
-              </Button>
-            </Link>
-            <div className="flex-1">
-              <CardTitle className="text-2xl">Profile</CardTitle>
-            </div>
-          </div>
-        </div>
-      </header>
+      <BackHeader title="profile.title" />
       {/* Profile Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Card>
           <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>Update your personal details</CardDescription>
+            <CardTitle>{t('profile.title')}</CardTitle>
+            <CardDescription>{t('profile.edit_profile')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-sm font-medium">
-                  Name
+                  {t('profile.name')}
                 </Label>
                 <Input id="name" placeholder="John Doe" />
                 <Label htmlFor="email" className="text-sm font-medium">
-                  Email
+                  {t('profile.email')}
                 </Label>
                 <Input id="email" placeholder="john.doe@example.com" />
               </div>

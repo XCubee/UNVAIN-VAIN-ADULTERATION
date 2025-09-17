@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ArrowLeft, Camera, CheckCircle, Clock, Lightbulb, AlertTriangle } from "lucide-react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import { useTranslation } from "@/lib/i18n/client"
 
 const testInstructions = {
   "milk-dairy": {
@@ -989,7 +990,8 @@ const testInstructions = {
   },
 }
 
-export default function TestInstructionPage() {
+export default function TestPage() {
+  const { t } = useTranslation()
   const params = useParams()
   const categoryId = params.category as string
   const itemId = params.item as string
@@ -1003,10 +1005,10 @@ export default function TestInstructionPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Test Not Found</h1>
-          <p className="text-muted-foreground mb-4">The requested test instructions do not exist.</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{t('test.not_found', 'Test Not Found')}</h1>
+          <p className="text-muted-foreground mb-4">{t('test.does_not_exist', 'The requested test instructions do not exist.')}</p>
           <Link href="/home">
-            <Button>Back to Home</Button>
+            <Button>{t('nav.back_to_home', 'Back to Home')}</Button>
           </Link>
         </div>
       </div>
@@ -1037,7 +1039,7 @@ export default function TestInstructionPage() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Test Overview
+              {t('test.overview', 'Test Overview')}
               <div className="flex items-center space-x-2">
                 <Badge variant="outline" className="text-xs">
                   <Clock className="w-3 h-3 mr-1" />
@@ -1053,7 +1055,7 @@ export default function TestInstructionPage() {
                   }
                   className="text-xs"
                 >
-                  {testData.difficulty}
+                  {t(`test.difficulty.${testData.difficulty.toLowerCase()}`, testData.difficulty)}
                 </Badge>
               </div>
             </CardTitle>
@@ -1061,22 +1063,22 @@ export default function TestInstructionPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h4 className="font-medium text-foreground mb-2">Common Adulterants:</h4>
+                <h4 className="font-medium text-foreground mb-2">{t('test.common_adulterants', 'Common Adulterants')}:</h4>
                 <div className="flex flex-wrap gap-1">
                   {testData.adulterants.map((adulterant) => (
                     <Badge key={adulterant} variant="outline" className="text-xs">
-                      {adulterant}
+                      {t(`adulterants.${adulterant.toLowerCase().replace(/ /g, '_')}`, adulterant)}
                     </Badge>
                   ))}
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-foreground mb-2">What You'll Need:</h4>
+                <h4 className="font-medium text-foreground mb-2">{t('test.what_you_need', 'What You\'ll Need')}:</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Sample of the food item</li>
-                  <li>• Clean water</li>
-                  <li>• Good lighting</li>
-                  <li>• Your smartphone camera</li>
+                  <li>• {t('test.sample_item', 'Sample of the food item')}</li>
+                  <li>• {t('test.clean_water', 'Clean water')}</li>
+                  <li>• {t('test.good_lighting', 'Good lighting')}</li>
+                  <li>• {t('test.smartphone_camera', 'Your smartphone camera')}</li>
                 </ul>
               </div>
             </div>
@@ -1087,16 +1089,15 @@ export default function TestInstructionPage() {
         <Alert className="mb-6 border-orange-200 bg-orange-50">
           <AlertTriangle className="h-4 w-4 text-orange-600" />
           <AlertDescription className="text-orange-800">
-            <strong>Important:</strong> Ensure good lighting when taking photos. The AI analysis depends on clear,
-            well-lit images for accurate results.
+            <strong>{t('test.important', 'Important')}:</strong> {t('test.lighting_notice', 'Ensure good lighting when taking photos. The AI analysis depends on clear, well-lit images for accurate results.')}
           </AlertDescription>
         </Alert>
 
         {/* Test Steps */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Step-by-Step Instructions</CardTitle>
-            <CardDescription>Follow these steps carefully for accurate testing results</CardDescription>
+            <CardTitle>{t('test.step_instructions', 'Step-by-Step Instructions')}</CardTitle>
+            <CardDescription>{t('test.follow_steps', 'Follow these steps carefully for accurate testing results')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -1108,8 +1109,8 @@ export default function TestInstructionPage() {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-medium text-foreground mb-1">{step.title}</h4>
-                    <p className="text-sm text-muted-foreground">{step.description}</p>
+                    <h4 className="font-medium text-foreground mb-1">{t(`test.steps.${categoryId}.${itemId}.${index}.title`, step.title)}</h4>
+                    <p className="text-sm text-muted-foreground">{t(`test.steps.${categoryId}.${itemId}.${index}.description`, step.description)}</p>
                   </div>
                   <div className="text-2xl">{step.icon}</div>
                 </div>
@@ -1123,7 +1124,7 @@ export default function TestInstructionPage() {
           <CardHeader>
             <CardTitle className="flex items-center text-blue-800">
               <Lightbulb className="w-5 h-5 mr-2" />
-              Pro Tips
+              {t('test.pro_tips', 'Pro Tips')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -1131,7 +1132,7 @@ export default function TestInstructionPage() {
               {testData.tips.map((tip, index) => (
                 <li key={index} className="flex items-start space-x-2 text-sm text-blue-700">
                   <CheckCircle className="w-4 h-4 mt-0.5 text-blue-600 flex-shrink-0" />
-                  <span>{tip}</span>
+                  <span>{t(`test.tips.${categoryId}.${itemId}.${index}`, tip)}</span>
                 </li>
               ))}
             </ul>
@@ -1141,14 +1142,14 @@ export default function TestInstructionPage() {
         {/* Action Button */}
         <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
           <CardContent className="p-6 text-center">
-            <h3 className="text-lg font-semibold text-foreground mb-2">Ready to Test?</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">{t('test.ready', 'Ready to Test?')}</h3>
             <p className="text-muted-foreground mb-4">
-              Once you've completed all the steps above, take a clear photo for AI analysis.
+              {t('test.completed_steps', 'Once you\'ve completed all the steps above, take a clear photo for AI analysis.')}
             </p>
             <Link href={`/upload/${categoryId}/${itemId}`}>
               <Button size="lg" className="bg-primary hover:bg-primary/90">
                 <Camera className="w-5 h-5 mr-2" />
-                Take Photo & Analyze
+                {t('test.take_photo', 'Take Photo & Analyze')}
               </Button>
             </Link>
           </CardContent>

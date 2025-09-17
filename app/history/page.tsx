@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  ArrowLeft,
   Search,
   Download,
   Share,
@@ -23,7 +22,8 @@ import {
   Eye,
   Trash2,
 } from "lucide-react"
-import Link from "next/link"
+import { BackHeader } from "@/components/BackHeader"
+import { useTranslation } from "@/lib/utils/translate"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 // Mock data for testing history
@@ -196,27 +196,7 @@ export default function HistoryPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b border-border">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link href="/home">
-                <Button variant="ghost" size="icon">
-                  <ArrowLeft className="w-5 h-5" />
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-foreground">Test History</h1>
-                <p className="text-sm text-muted-foreground">View and manage your food purity test reports</p>
-              </div>
-            </div>
-            <Button onClick={exportReports} variant="outline" className="bg-transparent">
-              <Download className="w-4 h-4 mr-2" />
-              Export All
-            </Button>
-          </div>
-        </div>
-      </header>
+      <BackHeader title="history.title" />
 
       <main className="max-w-6xl mx-auto px-4 py-6">
         {/* Stats Cards */}

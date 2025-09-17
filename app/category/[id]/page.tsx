@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, ChevronRight, Info } from "lucide-react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
+import { useTranslation } from "@/lib/i18n/client"
 
 const categoryData = {
   "milk-dairy": {
@@ -208,6 +209,7 @@ const categoryData = {
 }
 
 export default function CategoryPage() {
+  const { t } = useTranslation()
   const params = useParams()
   const categoryId = params.id as string
   const category = categoryData[categoryId as keyof typeof categoryData]
@@ -216,10 +218,10 @@ export default function CategoryPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-2">Category Not Found</h1>
-          <p className="text-muted-foreground mb-4">The requested category does not exist.</p>
+          <h1 className="text-2xl font-bold text-foreground mb-2">{t('category.not_found', 'Category Not Found')}</h1>
+          <p className="text-muted-foreground mb-4">{t('category.does_not_exist', 'The requested category does not exist.')}</p>
           <Link href="/home">
-            <Button>Back to Home</Button>
+            <Button>{t('nav.back_to_home', 'Back to Home')}</Button>
           </Link>
         </div>
       </div>
@@ -238,8 +240,8 @@ export default function CategoryPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-xl font-bold text-foreground">{category.name}</h1>
-              <p className="text-sm text-muted-foreground">{category.description}</p>
+              <h1 className="text-xl font-bold text-foreground">{t(`home.${categoryId}`, category.name)}</h1>
+              <p className="text-sm text-muted-foreground">{t(`home.${categoryId}_desc`, category.description)}</p>
             </div>
           </div>
         </div>
@@ -252,10 +254,9 @@ export default function CategoryPage() {
             <div className="flex items-start space-x-3">
               <Info className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <p className="text-sm text-blue-800 font-medium mb-1">Testing Instructions</p>
+                <p className="text-sm text-blue-800 font-medium mb-1">{t('category.testing_instructions', 'Testing Instructions')}</p>
                 <p className="text-sm text-blue-700">
-                  Select an item below to view detailed testing instructions. Ensure you have good lighting and a clean
-                  surface for accurate results.
+                  {t('category.select_item_instructions', 'Select an item below to view detailed testing instructions. Ensure you have good lighting and a clean surface for accurate results.')}
                 </p>
               </div>
             </div>
@@ -269,29 +270,29 @@ export default function CategoryPage() {
               <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer border-2 hover:border-primary/20">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{item.name}</CardTitle>
+                    <CardTitle className="text-lg">{t(`items.${item.id}.name`, item.name)}</CardTitle>
                     <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
-                  <CardDescription>{item.description}</CardDescription>
+                  <CardDescription>{t(`items.${item.id}.description`, item.description)}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div>
-                    <p className="text-sm font-medium text-foreground mb-2">Common Adulterants:</p>
+                    <p className="text-sm font-medium text-foreground mb-2">{t('category.common_adulterants', 'Common Adulterants')}:</p>
                     <div className="flex flex-wrap gap-1">
                       {item.commonAdulterants.slice(0, 3).map((adulterant) => (
                         <Badge key={adulterant} variant="outline" className="text-xs">
-                          {adulterant}
+                          {t(`adulterants.${adulterant.toLowerCase().replace(/ /g, '_')}`, adulterant)}
                         </Badge>
                       ))}
                       {item.commonAdulterants.length > 3 && (
                         <Badge variant="outline" className="text-xs">
-                          +{item.commonAdulterants.length - 3} more
+                          +{item.commonAdulterants.length - 3} {t('category.more', 'more')}
                         </Badge>
                       )}
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Test Duration:</span>
+                    <span className="text-muted-foreground">{t('category.test_duration', 'Test Duration')}:</span>
                     <Badge variant="secondary" className="text-xs">
                       {item.testTime}
                     </Badge>
@@ -305,16 +306,16 @@ export default function CategoryPage() {
         {/* Bottom CTA */}
         <Card className="mt-8 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
           <CardContent className="p-6 text-center">
-            <h3 className="text-lg font-semibold text-foreground mb-2">Need Help?</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">{t('category.need_help', 'Need Help?')}</h3>
             <p className="text-muted-foreground mb-4">
-              Watch our tutorial videos or contact our support team for assistance with testing procedures.
+              {t('category.help_description', 'Watch our tutorial videos or contact our support team for assistance with testing procedures.')}
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
               <Button variant="outline" className="bg-transparent">
-                Watch Tutorials
+                {t('category.watch_tutorials', 'Watch Tutorials')}
               </Button>
               <Button variant="outline" className="bg-transparent">
-                Contact Support
+                {t('category.contact_support', 'Contact Support')}
               </Button>
             </div>
           </CardContent>
