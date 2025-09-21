@@ -2,9 +2,18 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Droplets, History, User } from "lucide-react"
+import { Droplets, History, User, LogOut } from "lucide-react"
 import { LanguageSelector } from "@/components/LanguageSelector"
 import { useTranslation } from "@/lib/utils/translate"
+import { useAuth } from "@/lib/contexts/AuthContext"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Header() {
   const { t } = useTranslation()
