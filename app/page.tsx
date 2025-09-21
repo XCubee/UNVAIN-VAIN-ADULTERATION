@@ -176,8 +176,9 @@ export default function AuthPage() {
                       checked={rememberMe}
                       onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                       disabled={isLoading}
+                      className="z-10"
                     />
-                    <Label htmlFor="remember" className="text-sm">
+                    <Label htmlFor="remember" className="text-sm cursor-pointer">
                       Remember me
                     </Label>
                   </div>
