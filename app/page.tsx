@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,21 +8,95 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Droplets, Shield, Sparkles } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Droplets, Shield, Sparkles, AlertCircle } from "lucide-react"
+import { signUp, signIn, signInWithGoogle } from "@/lib/auth"
+import { useAuth } from "@/lib/contexts/AuthContext"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const { user, loading } = useAuth()
+  const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Redirect to home if user is already logged in
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/home")
+    }
+  }, [user, loading, router])
+
+  // Show loading spinner while checking auth state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-primary/5 flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+          <span className="text-muted-foreground">Loading...</span>
+        </div>
+      </div>
+    )
+  }
+
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate authentication
-    setTimeout(() => {
+    setError("")
+    setSuccess("")
+
+    const formData = new FormData(e.target as HTMLFormElement)
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    const result = await signIn({ email, password })
+
+    if (result.success) {
+      setSuccess("Sign in successful! Redirecting...")
+      // The useEffect hook will handle the redirect when user state changes
+    } else {
+      setError(result.error || "Sign in failed")
+    }
+
+    setIsLoading(false)
+  }
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
+    setSuccess("")
+
+    const formData = new FormData(e.target as HTMLFormElement)
+    const fullName = formData.get("name") as string
+    const email = formData.get("signup-email") as string
+    const password = formData.get("signup-password") as string
+
+    const result = await signUp({ email, password, fullName })
+
+    if (result.success) {
+      setSuccess("Account created successfully! Please check your email to verify your account.")
+    } else {
+      setError(result.error || "Sign up failed")
+    }
+
+    setIsLoading(false)
+  }
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true)
+    setError("")
+    
+    const result = await signInWithGoogle()
+    
+    if (!result.success) {
+      setError(result.error || "Google sign in failed")
       setIsLoading(false)
-      // Redirect to home page
-      window.location.href = "/home"
-    }, 2000)
+    }
+    // If successful, the OAuth flow will handle the redirect
   }
 
   return (
@@ -50,6 +123,21 @@ export default function AuthPage() {
             <CardDescription className="text-center">Sign in to your account or create a new one</CardDescription>
           </CardHeader>
           <CardContent>
+            {/* Error/Success Messages */}
+            {error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {success && (
+              <Alert className="mb-4 border-green-200 bg-green-50 text-green-800">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{success}</AlertDescription>
+              </Alert>
+            )}
+
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
@@ -57,25 +145,29 @@ export default function AuthPage() {
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4 mt-6">
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
+                      name="email"
                       type="email"
                       placeholder="Enter your email"
                       required
                       className="bg-input border-border"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
                     <Input
                       id="password"
+                      name="password"
                       type="password"
                       placeholder="Enter your password"
                       required
                       className="bg-input border-border"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -83,6 +175,7 @@ export default function AuthPage() {
                       id="remember"
                       checked={rememberMe}
                       onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                      disabled={isLoading}
                     />
                     <Label htmlFor="remember" className="text-sm">
                       Remember me
@@ -102,35 +195,42 @@ export default function AuthPage() {
               </TabsContent>
 
               <TabsContent value="signup" className="space-y-4 mt-6">
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input
                       id="name"
+                      name="name"
                       type="text"
                       placeholder="Enter your full name"
                       required
                       className="bg-input border-border"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
                       id="signup-email"
+                      name="signup-email"
                       type="email"
                       placeholder="Enter your email"
                       required
                       className="bg-input border-border"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
                     <Input
                       id="signup-password"
+                      name="signup-password"
                       type="password"
-                      placeholder="Create a password"
+                      placeholder="Create a password (min 6 characters)"
                       required
+                      minLength={6}
                       className="bg-input border-border"
+                      disabled={isLoading}
                     />
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
@@ -157,7 +257,13 @@ export default function AuthPage() {
                 </div>
               </div>
               <div className="mt-4 space-y-2">
-                <Button variant="outline" className="w-full bg-transparent" type="button">
+                <Button 
+                  variant="outline" 
+                  className="w-full bg-transparent" 
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={isLoading}
+                >
                   <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -178,10 +284,6 @@ export default function AuthPage() {
                   </svg>
                   Continue with Google
                 </Button>
-                <Button variant="outline" className="w-full bg-transparent" type="button">
-                  <Shield className="w-4 h-4 mr-2" />
-                  Continue with Phone OTP
-                </Button>
               </div>
             </div>
           </CardContent>
@@ -195,7 +297,7 @@ export default function AuthPage() {
               <span className="text-sm">Secure</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 w-4" />
               <span className="text-sm">AI-Powered</span>
             </div>
             <div className="flex items-center space-x-2">
