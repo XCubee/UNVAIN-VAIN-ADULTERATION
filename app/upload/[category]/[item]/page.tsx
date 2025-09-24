@@ -11,6 +11,8 @@ import { ArrowLeft, Camera, Upload, RotateCcw, Save, Share, CheckCircle, AlertTr
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import Image from "next/image"
+import { calculateSafetyScore } from "@/lib/utils"
+import { SafetyScoreDisplay } from "@/components/SafetyScoreDisplay"
 
 const itemNames = {
   "milk-dairy": {
@@ -64,6 +66,9 @@ export default function PhotoUploadPage() {
   const [analysisResult, setAnalysisResult] = useState<any>(null)
   const [showResult, setShowResult] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [safetyScore, setSafetyScore] = useState<number | null>(null)
+  const [adulterants, setAdulterants] = useState<string[]>([])
+  const [analysisDetails, setAnalysisDetails] = useState<string | null>(null)
 
   const itemName =
     itemNames[categoryId as keyof typeof itemNames]?.[itemId as keyof (typeof itemNames)[keyof typeof itemNames]] ||
@@ -94,23 +99,11 @@ export default function PhotoUploadPage() {
     setIsUploading(true)
 
     try {
-      const formData = new FormData()
-      formData.append("file", selectedFile)
-      formData.append("category", categoryId)
-      formData.append("itemName", itemName)
-
-      const uploadResponse = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      })
-
-      if (!uploadResponse.ok) {
-        throw new Error("Failed to upload image")
-      }
-
-      const { imageUrl } = await uploadResponse.json()
+      // Simulate file upload
+      await new Promise(resolve => setTimeout(resolve, 1000));
       setIsUploading(false)
 
+      // Show progress animation
       const progressInterval = setInterval(() => {
         setAnalysisProgress((prev) => {
           if (prev >= 90) {
@@ -121,34 +114,51 @@ export default function PhotoUploadPage() {
         })
       }, 300)
 
-      const analysisResponse = await fetch("/api/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          imageUrl,
-          category: categoryId,
-          itemName,
-          testType: "visual_analysis",
-        }),
-      })
+      // For demo, directly use the safety score calculation
+      // Make sure we're getting all the required fields
+      const result = calculateSafetyScore(
+        categoryId,
+        itemId,
+        selectedFile.name // Using filename as a seed for consistent results
+      )
+      
+      // Extract all needed values with defaults to prevent undefined errors
+      const { 
+        score = 85, 
+        status = "pure", 
+        adulterants = [], 
+        details = "No issues detected", 
+        recommendations = [],
+        confidence = 95
+      } = result;
+      
+      // Update all state variables
+      setSafetyScore(score)
+      setAdulterants(adulterants)
+      setAnalysisDetails(details)
 
-      if (!analysisResponse.ok) {
-        throw new Error("Failed to analyze image")
-      }
-
-      const result = await analysisResponse.json()
-
+      // Complete the progress animation
       clearInterval(progressInterval)
       setAnalysisProgress(100)
+      
+      // Set the complete analysis result with all required fields
+      setAnalysisResult({
+        status,
+        confidence,
+        details,
+        adulterants,
+        recommendations,
+        score
+      })
+      
+      // Show the result and complete analysis
       setIsAnalyzing(false)
-      setAnalysisResult(result)
       setShowResult(true)
     } catch (error) {
       console.error("Analysis failed:", error)
       setIsAnalyzing(false)
       setIsUploading(false)
+      // Use a more user-friendly error message
       alert("Analysis failed. Please try again.")
     }
   }
@@ -463,22 +473,26 @@ export default function PhotoUploadPage() {
                     />
                   </div>
                   <div className="space-y-4">
-                    <div>
-                      <h4 className="font-medium text-foreground mb-2">Confidence Score</h4>
-                      <div className="flex items-center space-x-3">
-                        <Progress value={analysisResult.confidence} className="flex-1" />
-                        <span className="text-sm font-medium">{analysisResult.confidence}%</span>
+                    {/* Safety Score Display */}
+                    {safetyScore !== null && (
+                      <div>
+                        <h4 className="font-medium text-foreground mb-2">Safety Score</h4>
+                        <SafetyScoreDisplay 
+                          score={safetyScore} 
+                          status={analysisResult.status} 
+                          adulterants={adulterants}
+                        />
                       </div>
-                    </div>
+                    )}
                     <div>
                       <h4 className="font-medium text-foreground mb-2">Analysis Summary</h4>
-                      <p className="text-sm text-muted-foreground">{analysisResult.details}</p>
+                      <p className="text-sm text-muted-foreground">{analysisDetails || analysisResult.details}</p>
                     </div>
-                    {analysisResult.adulterants && (
+                    {adulterants.length > 0 && (
                       <div>
                         <h4 className="font-medium text-foreground mb-2">Detected Adulterants</h4>
                         <div className="flex flex-wrap gap-1">
-                          {analysisResult.adulterants.map((adulterant: string) => (
+                          {adulterants.map((adulterant: string) => (
                             <Badge key={adulterant} variant="destructive" className="text-xs">
                               {adulterant}
                             </Badge>
