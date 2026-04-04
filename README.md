@@ -1,6 +1,6 @@
 # Purity Lens - Food Purity Detection App
  
-Purity Lens is a comprehensive web application that uses AI to analyze photos of food items to detect adulteration and ensure food purity. Built with Next.js, Supabase, and modern web technologies.
+Purity Lens is a comprehens ive web application that uses AI to analyze photos of food items to detect adulteration and ensure food purity. Built with Next.js, Supabase, and modern web technologies.
 
 ## Features
 
